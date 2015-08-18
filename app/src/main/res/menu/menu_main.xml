@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item android:id="@+id/read"
+        android:showAsAction="always"
+		android:titleCondensed="@string/btn_read"
+		android:visible="true"
+		android:title="@string/btn_read">
+	</item>
+		
+    <item android:id="@+id/clear"
+		android:showAsAction="always"
+		android:titleCondensed="@string/btn_clear"
+		android:visible="true"
+		android:title="@string/btn_clear">
+	</item>
+</menu>

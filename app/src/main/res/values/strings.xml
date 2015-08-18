@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">ResReader</string>
+	
+    <string name="label_type">Type:</string>
+    <string name="label_package">Package:</string>
+    <string name="label_key">Key:</string>
+    <string name="label_value">Value:</string>
+    <string name="label_resid">ResId:</string>
+
+    <string name="hint_package">Package name</string>
+    <string name="hint_key">i.e. app_name</string>
+
+    <string name="btn_read">Read</string>
+    <string name="btn_clear">Clear</string>
+
+	<string name="err_type">Invalid type</string>
+	<string name="err_pkg">Invalid package name</string>
+	<string name="err_key">Invalid key</string>
+	<string name="err_not_found">Not found</string>
+	
+	<string name="text_dot">.</string>
+</resources>
