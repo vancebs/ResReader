@@ -28,13 +28,16 @@ public class MainActivity extends Activity {
     private static final String TYPE_BOOLEAN = "bool";
     private static final String TYPE_STRING = "string";
 
-    private static final String[] mTypes = {TYPE_INTEGER, TYPE_BOOLEAN,
-            TYPE_STRING};
+    private static final String[] TYPES = {
+            TYPE_INTEGER,
+            TYPE_BOOLEAN,
+            TYPE_STRING
+    };
 
     private static final String INTERNAL_PKG = "com.android.internal";
     private static final String[] NATIVE_PKGS = new String[]{
             "android",
-            "com.android.internal"
+            INTERNAL_PKG
     };
 
     private Spinner mType;
@@ -115,8 +118,6 @@ public class MainActivity extends Activity {
 
         Context ctxt = getPkgContext(mValuePkg);
         int resId = getResId(ctxt, mValuePkg, mValueType, mValueKey);
-        //int resId = createContext(mValuePkg).getResources().getIdentifier(mValueKey, mValueType, mValuePkg);
-        //int resId = getResId2(mValueKey, mValueType, mValuePkg);
         String value = getValueOfResId(ctxt, mValueType, resId);
         mResId.setText(String.valueOf(resId));
         mValue.setText(value);
@@ -157,13 +158,13 @@ public class MainActivity extends Activity {
             Field field = clazz.getField(key);
             resId = field.getInt(null);
         } catch (ClassNotFoundException e) {
-            android.util.Log.w(TAG, "getResId2()# ClassNotFoundException");
+            android.util.Log.w(TAG, "getResId2()# ClassNotFoundException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
         } catch (NoSuchFieldException e) {
-            android.util.Log.w(TAG, "getResId2()# NoSuchFieldException");
+            android.util.Log.w(TAG, "getResId2()# NoSuchFieldException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
         } catch (IllegalAccessException e) {
-            android.util.Log.w(TAG, "getResId2()# IllegalAccessException");
+            android.util.Log.w(TAG, "getResId2()# IllegalAccessException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
         } catch (IllegalArgumentException e) {
-            android.util.Log.w(TAG, "getResId2()# IllegalArgumentException");
+            android.util.Log.w(TAG, "getResId2()# IllegalArgumentException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
         }
 
         return resId;
@@ -226,7 +227,7 @@ public class MainActivity extends Activity {
         int index = mType.getSelectedItemPosition();
         if (index != mValueTypeIndex) {
             mValueTypeIndex = index;
-            mValueType = mTypes[mValueTypeIndex];
+            mValueType = TYPES[mValueTypeIndex];
             return true;
         } else {
             return false;
@@ -272,13 +273,13 @@ public class MainActivity extends Activity {
 
     private List<String> getKeyList(String type, String pkg) {
         if (isNativePkg(pkg)) {
-            return getKeyList_Native(type, pkg);
+            return getKeyListNative(type, pkg);
         } else {
-            return null;
+            return new ArrayList<>();
         }
     }
 
-    private List<String> getKeyList_Native(String type, String pkg) {
+    private List<String> getKeyListNative(String type, String pkg) {
         List<String> keyList = new ArrayList<>();
         String clazzName = pkg + ".R$" + type;
 
@@ -293,7 +294,7 @@ public class MainActivity extends Activity {
                 }
             }
         } catch (ClassNotFoundException e) {
-            android.util.Log.w(TAG, "getKeyList_Native()# class not found");
+            android.util.Log.w(TAG, "getKeyList_Native()# class not found. [pkg: " + pkg + ", type: " + type + "]");
         }
 
         return keyList;
