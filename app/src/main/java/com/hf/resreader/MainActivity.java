@@ -203,7 +203,7 @@ public class MainActivity extends Activity {
     }
 
     private List<String> getPackageList() {
-        ArrayList<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         PackageManager pm = getPackageManager();
         List<PackageInfo> infos = pm.getInstalledPackages(0);
         for (PackageInfo info : infos) {
@@ -220,6 +220,7 @@ public class MainActivity extends Activity {
         try {
             return createPackageContext(pkg, Context.CONTEXT_IGNORE_SECURITY);
         } catch (NameNotFoundException e) {
+            Log.w(TAG, "Create context failed! pkg: " + pkg, e);
             return null;
         }
     }
