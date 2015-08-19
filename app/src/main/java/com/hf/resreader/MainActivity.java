@@ -159,13 +159,13 @@ public class MainActivity extends Activity {
             Field field = clazz.getField(key);
             resId = field.getInt(null);
         } catch (ClassNotFoundException e) {
-            Log.w(TAG, "getResId2()# ClassNotFoundException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
+            Log.w(TAG, "getResId2()# ClassNotFoundException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]", e);
         } catch (NoSuchFieldException e) {
-            Log.w(TAG, "getResId2()# NoSuchFieldException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
+            Log.w(TAG, "getResId2()# NoSuchFieldException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]", e);
         } catch (IllegalAccessException e) {
-            Log.w(TAG, "getResId2()# IllegalAccessException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
+            Log.w(TAG, "getResId2()# IllegalAccessException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]", e);
         } catch (IllegalArgumentException e) {
-            Log.w(TAG, "getResId2()# IllegalArgumentException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
+            Log.w(TAG, "getResId2()# IllegalArgumentException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]", e);
         }
 
         return resId;
@@ -295,7 +295,7 @@ public class MainActivity extends Activity {
                 }
             }
         } catch (ClassNotFoundException e) {
-            Log.w(TAG, "getKeyList_Native()# class not found. [pkg: " + pkg + ", type: " + type + "]");
+            Log.w(TAG, "getKeyList_Native()# class not found. [pkg: " + pkg + ", type: " + type + "]", e);
         }
 
         return keyList;
