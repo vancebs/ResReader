@@ -10,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -158,13 +159,13 @@ public class MainActivity extends Activity {
             Field field = clazz.getField(key);
             resId = field.getInt(null);
         } catch (ClassNotFoundException e) {
-            android.util.Log.w(TAG, "getResId2()# ClassNotFoundException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
+            Log.w(TAG, "getResId2()# ClassNotFoundException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
         } catch (NoSuchFieldException e) {
-            android.util.Log.w(TAG, "getResId2()# NoSuchFieldException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
+            Log.w(TAG, "getResId2()# NoSuchFieldException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
         } catch (IllegalAccessException e) {
-            android.util.Log.w(TAG, "getResId2()# IllegalAccessException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
+            Log.w(TAG, "getResId2()# IllegalAccessException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
         } catch (IllegalArgumentException e) {
-            android.util.Log.w(TAG, "getResId2()# IllegalArgumentException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
+            Log.w(TAG, "getResId2()# IllegalArgumentException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]");
         }
 
         return resId;
@@ -294,7 +295,7 @@ public class MainActivity extends Activity {
                 }
             }
         } catch (ClassNotFoundException e) {
-            android.util.Log.w(TAG, "getKeyList_Native()# class not found. [pkg: " + pkg + ", type: " + type + "]");
+            Log.w(TAG, "getKeyList_Native()# class not found. [pkg: " + pkg + ", type: " + type + "]");
         }
 
         return keyList;
