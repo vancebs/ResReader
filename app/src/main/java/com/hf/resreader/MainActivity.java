@@ -152,6 +152,8 @@ public class MainActivity extends Activity {
     }
 
     private int getResId2(String key, String type, String pkg) {
+        final String INFO_FORMAT = "[pkg: %s, type: %s, key: %s]";
+
         int resId = -1;
         try {
             String clazzName = pkg + ".R$" + type;
@@ -159,13 +161,13 @@ public class MainActivity extends Activity {
             Field field = clazz.getField(key);
             resId = field.getInt(null);
         } catch (ClassNotFoundException e) {
-            Log.w(TAG, "getResId2()# ClassNotFoundException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]", e);
+            Log.w(TAG, "getResId2()# " + String.format(INFO_FORMAT, pkg, type, key), e);
         } catch (NoSuchFieldException e) {
-            Log.w(TAG, "getResId2()# NoSuchFieldException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]", e);
+            Log.w(TAG, "getResId2()# " + String.format(INFO_FORMAT, pkg, type, key), e);
         } catch (IllegalAccessException e) {
-            Log.w(TAG, "getResId2()# IllegalAccessException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]", e);
+            Log.w(TAG, "getResId2()# " + String.format(INFO_FORMAT, pkg, type, key), e);
         } catch (IllegalArgumentException e) {
-            Log.w(TAG, "getResId2()# IllegalArgumentException [pkg: " + pkg + ", type: " + type + ", key: " + key + "]", e);
+            Log.w(TAG, "getResId2()# " + String.format(INFO_FORMAT, pkg, type, key), e);
         }
 
         return resId;
