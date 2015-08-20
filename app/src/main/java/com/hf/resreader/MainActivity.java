@@ -152,22 +152,14 @@ public class MainActivity extends Activity {
     }
 
     private int getResId2(String key, String type, String pkg) {
-        final String INFO_FORMAT = "[pkg: %s, type: %s, key: %s]";
-
         int resId = -1;
         try {
             String clazzName = pkg + ".R$" + type;
             Class<?> clazz = Class.forName(clazzName);
             Field field = clazz.getField(key);
             resId = field.getInt(null);
-        } catch (ClassNotFoundException e) {
-            Log.w(TAG, "getResId2()# " + String.format(INFO_FORMAT, pkg, type, key), e);
-        } catch (NoSuchFieldException e) {
-            Log.w(TAG, "getResId2()# " + String.format(INFO_FORMAT, pkg, type, key), e);
-        } catch (IllegalAccessException e) {
-            Log.w(TAG, "getResId2()# " + String.format(INFO_FORMAT, pkg, type, key), e);
-        } catch (IllegalArgumentException e) {
-            Log.w(TAG, "getResId2()# " + String.format(INFO_FORMAT, pkg, type, key), e);
+        } catch (ClassNotFoundException | IllegalArgumentException | NoSuchFieldException | IllegalAccessException e) {
+            Log.w(TAG, "getResId2()# " + String.format("[pkg: %s, type: %s, key: %s]", pkg, type, key), e);
         }
 
         return resId;
