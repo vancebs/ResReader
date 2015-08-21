@@ -42,38 +42,10 @@
             android:hint="@string/hint_key" />
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/value_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/result_text_size"
-            android:text="@string/label_resid" />
-        <TextView
-            android:id="@+id/resid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/result_text_size" />
-
-    </LinearLayout>
-
-   <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/result_text_size"
-            android:text="@string/label_value" />
-        <TextView
-            android:id="@+id/value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/result_text_size" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content">
+    </FrameLayout>
 
 </LinearLayout>

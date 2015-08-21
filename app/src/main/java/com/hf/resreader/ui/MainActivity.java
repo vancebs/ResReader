@@ -1,26 +1,27 @@
-package com.hf.resreader;
+package com.hf.resreader.ui;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
-import android.widget.TextView;
+
+import com.hf.resreader.R;
+import com.hf.resreader.ResReaderManager;
 
 public class MainActivity extends Activity {
     private static final String TAG = "ResReader";
@@ -44,13 +45,13 @@ public class MainActivity extends Activity {
     private Spinner mType;
     private AutoCompleteTextView mPkg;
     private AutoCompleteTextView mKey;
-    private TextView mValue;
-    private TextView mResId;
 
     private int mValueTypeIndex = 0;
     private String mValueType;
     private String mValuePkg;
     private String mValueKey;
+
+    private ResReaderManager mResReaderManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +61,10 @@ public class MainActivity extends Activity {
         mType = (Spinner) findViewById(R.id.type);
         mPkg = (AutoCompleteTextView) findViewById(R.id.pkg);
         mKey = (AutoCompleteTextView) findViewById(R.id.key);
-        mValue = (TextView) findViewById(R.id.value);
-        mResId = (TextView) findViewById(R.id.resid);
+
+        // create reader manager
+        ViewGroup container = (ViewGroup) findViewById(R.id.value_container);
+        mResReaderManager = new ResReaderManager(this, container);
 
         // get pkg auto complete
         setPkgAutoComplete();
@@ -117,16 +120,11 @@ public class MainActivity extends Activity {
         updatePkgValue();
         updateKeyValue();
 
-        Context ctxt = getPkgContext(mValuePkg);
-        int resId = getResId(ctxt, mValuePkg, mValueType, mValueKey);
-        String value = getValueOfResId(ctxt, mValueType, resId);
-        mResId.setText(String.valueOf(resId));
-        mValue.setText(value);
+        mResReaderManager.read( mValuePkg, mValueType, mValueKey);
     }
 
     private void onClearClicked() {
-        mValue.setText("");
-        mResId.setText("");
+        mResReaderManager.clear();
     }
 
     private boolean isNativePkg(String pkg) {
@@ -143,59 +141,6 @@ public class MainActivity extends Activity {
         return false;
     }
 
-    private int getResId(Context context, String pkg, String type, String key) {
-        if (isNativePkg(pkg)) {
-            return getResId2(key, type, pkg);
-        }
-
-        return context.getResources().getIdentifier(key, type, pkg);
-    }
-
-    private int getResId2(String key, String type, String pkg) {
-        int resId = -1;
-        try {
-            String clazzName = pkg + ".R$" + type;
-            Class<?> clazz = Class.forName(clazzName);
-            Field field = clazz.getField(key);
-            resId = field.getInt(null);
-        } catch (ClassNotFoundException | IllegalArgumentException | NoSuchFieldException | IllegalAccessException e) {
-            Log.w(TAG, "getResId2()# " + String.format("[pkg: %s, type: %s, key: %s]", pkg, type, key), e);
-        }
-
-        return resId;
-    }
-
-    private Context getPkgContext(String pkg) {
-        Context context;
-
-        if (isNativePkg(pkg)) {
-            context = this;
-        } else {
-            context = createContext(pkg);
-            if (context == null) {
-                context = this;
-            }
-        }
-
-        return context;
-    }
-
-    private String getValueOfResId(Context context, String type, int resId) {
-        if (resId > 0) {
-            if (TYPE_INTEGER.equals(type)) {
-                int iValue = context.getResources().getInteger(resId);
-                return String.valueOf(iValue);
-            } else if (TYPE_BOOLEAN.equals(type)) {
-                boolean bValue = context.getResources().getBoolean(resId);
-                return String.valueOf(bValue);
-            } else if (TYPE_STRING.equals(type)) {
-                return context.getResources().getString(resId);
-            }
-        }
-
-        return getResources().getString(R.string.err_not_found);
-    }
-
     private List<String> getPackageList() {
         List<String> list = new ArrayList<>();
         PackageManager pm = getPackageManager();
@@ -208,15 +153,6 @@ public class MainActivity extends Activity {
             list.add(INTERNAL_PKG);
         }
         return list;
-    }
-
-    private Context createContext(String pkg) {
-        try {
-            return createPackageContext(pkg, Context.CONTEXT_IGNORE_SECURITY);
-        } catch (NameNotFoundException e) {
-            Log.w(TAG, "Create context failed! pkg: " + pkg, e);
-            return null;
-        }
     }
 
     private boolean updateTypeValue() {
@@ -271,6 +207,7 @@ public class MainActivity extends Activity {
         if (isNativePkg(pkg)) {
             return getKeyListNative(type, pkg);
         } else {
+            // TODO
             return new ArrayList<>();
         }
     }
