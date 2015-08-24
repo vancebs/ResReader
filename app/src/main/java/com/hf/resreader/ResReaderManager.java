@@ -48,7 +48,33 @@ public class ResReaderManager {
     public static final String TYPE_XML = "xml";
     public static final String TYPE_STYLEABLE = "styleable";
 
-    private static Map<String, IResReader> mReaderMap = null;
+    private static final IResReader INVALID_TYPE_RES_READER = new InvalidTypeResReader();
+    private static final Map<String, IResReader> RES_READER_MAP = new HashMap<String, IResReader>(){
+        {
+            put(TYPE_ANIM, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_ANIMATOR, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_ARRAY, new ArrayResReader());
+            put(TYPE_ATTR, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_BOOLEAN, new BooleanResReader());
+            put(TYPE_COLOR, new ColorResReader());
+            put(TYPE_DIMEN, new DimenResReader());
+            put(TYPE_DRAWABLE, new DrawableResReader());
+            put(TYPE_FRACTION, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_ID, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_INTEGER, new IntegerResReader());
+            put(TYPE_INTERPOLATOR, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_LAYOUT, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_MENU, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_MIPMAP, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_PLURALS, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_RAW, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_STRING, new StringResReader());
+            put(TYPE_STYLE, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_TRANSITION, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_XML, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_STYLEABLE, INVALID_TYPE_RES_READER); // TODO
+        }
+    };
 
     private ViewGroup mContainer;
     private Context mContext;
@@ -62,41 +88,8 @@ public class ResReaderManager {
         mContainer = container;
     }
 
-    private static Map<String, IResReader> getReaderMap() {
-        if (mReaderMap == null) {
-            mReaderMap = new HashMap<>();
-
-            IResReader invalidTypeResReader = new InvalidTypeResReader();
-
-            mReaderMap.put(TYPE_ANIM, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_ANIMATOR, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_ARRAY, new ArrayResReader());
-            mReaderMap.put(TYPE_ATTR, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_BOOLEAN, new BooleanResReader());
-            mReaderMap.put(TYPE_COLOR, new ColorResReader());
-            mReaderMap.put(TYPE_DIMEN, new DimenResReader());
-            mReaderMap.put(TYPE_DRAWABLE, new DrawableResReader());
-            mReaderMap.put(TYPE_FRACTION, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_ID, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_INTEGER, new IntegerResReader());
-            mReaderMap.put(TYPE_INTERPOLATOR, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_LAYOUT, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_MENU, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_MIPMAP, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_PLURALS, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_RAW, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_STRING, new StringResReader());
-            mReaderMap.put(TYPE_STYLE, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_TRANSITION, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_XML, invalidTypeResReader); // TODO
-            mReaderMap.put(TYPE_STYLEABLE, invalidTypeResReader); // TODO
-        }
-
-        return mReaderMap;
-    }
-
     private static IResReader getReader(String type) {
-        IResReader reader = getReaderMap().get(type);
+        IResReader reader = RES_READER_MAP.get(type);
         if (reader == null) {
             Log.w(TAG, "Invalid type: " + type);
             reader = new InvalidTypeResReader();
