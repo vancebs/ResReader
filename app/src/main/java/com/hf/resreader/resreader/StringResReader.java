@@ -4,6 +4,7 @@ import android.content.Context;
 
 /**
  * Created by Fan on 2015/8/20.
+ * String resource reader
  */
 public class StringResReader extends AbstractStringTypeResReader {
     @Override

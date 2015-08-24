@@ -6,6 +6,7 @@
     <string name="label_key">Key:</string>
     <string name="label_value">Value:</string>
     <string name="label_resid">ResId:</string>
+    <string name="label_r">R.</string>
 
     <string name="hint_package">Package name</string>
     <string name="hint_key">i.e. app_name</string>

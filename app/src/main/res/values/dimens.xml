@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 	
 	<dimen name="result_text_size">20sp</dimen>
+
+    <dimen name="color_block_size">25dp</dimen>
 </resources>

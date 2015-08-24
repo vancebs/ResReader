@@ -26,15 +26,11 @@ import com.hf.resreader.ResReaderManager;
 public class MainActivity extends Activity {
     private static final String TAG = "ResReader";
 
-    private static final String TYPE_INTEGER = "integer";
-    private static final String TYPE_BOOLEAN = "bool";
-    private static final String TYPE_STRING = "string";
+    private static final String EXTRA_PKG = "extra-pkg";
+    private static final String EXTRA_TYPE_INDEX = "extra-type-index";
+    private static final String EXTRA_KEY = "extra-key";
 
-    private static final String[] TYPES = {
-            TYPE_INTEGER,
-            TYPE_BOOLEAN,
-            TYPE_STRING
-    };
+    private String[] mTypes = null;
 
     private static final String INTERNAL_PKG = "com.android.internal";
     private static final String[] NATIVE_PKGS = new String[]{
@@ -46,7 +42,7 @@ public class MainActivity extends Activity {
     private AutoCompleteTextView mPkg;
     private AutoCompleteTextView mKey;
 
-    private int mValueTypeIndex = 0;
+    private int mValueTypeIndex = -1;
     private String mValueType;
     private String mValuePkg;
     private String mValueKey;
@@ -69,34 +65,40 @@ public class MainActivity extends Activity {
         // get pkg auto complete
         setPkgAutoComplete();
 
+        // set key auto complete
         mPkg.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus && updatePkgValue()) {
+                if (!hasFocus) {
                     // key auto complete
                     setKeyAutoComplete();
                 }
             }
         });
-
         mType.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                if (updateTypeValue()) {
-                    setKeyAutoComplete();
-                }
+                setKeyAutoComplete();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
-                if (updateTypeValue()) {
-                    setKeyAutoComplete();
-                }
+                setKeyAutoComplete();
             }
         });
+
+        // read last saved values
+        if (savedInstanceState != null) {
+            mPkg.setText(savedInstanceState.getString(EXTRA_PKG, ""));
+            mType.setSelection(savedInstanceState.getInt(EXTRA_TYPE_INDEX, 0));
+            mKey.setText(savedInstanceState.getString(EXTRA_KEY, ""));
+
+            onReadClicked();
+        }
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -115,12 +117,23 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void onReadClicked() {
-        updateTypeValue();
-        updatePkgValue();
-        updateKeyValue();
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        mResReaderManager.read( mValuePkg, mValueType, mValueKey);
+        outState.putString(EXTRA_PKG, mValuePkg);
+        outState.putInt(EXTRA_TYPE_INDEX, mValueTypeIndex);
+        outState.putString(EXTRA_KEY, mValueKey);
+    }
+
+    private void onReadClicked() {
+        boolean updatePkg = updatePkgValue();
+        boolean updateType = updateTypeValue();
+        boolean updateKey = updateKeyValue();
+
+        if (updatePkg || updateType || updateKey) {
+            mResReaderManager.read(mValuePkg, mValueType, mValueKey);
+        }
     }
 
     private void onClearClicked() {
@@ -159,7 +172,7 @@ public class MainActivity extends Activity {
         int index = mType.getSelectedItemPosition();
         if (index != mValueTypeIndex) {
             mValueTypeIndex = index;
-            mValueType = TYPES[mValueTypeIndex];
+            mValueType = getTypes()[mValueTypeIndex];
             return true;
         } else {
             return false;
@@ -193,14 +206,19 @@ public class MainActivity extends Activity {
     }
 
     private void setKeyAutoComplete() {
-        if (mValuePkg == null || mValuePkg.isEmpty() || mValueType == null
-                || mValueType.isEmpty()) {
-            return;
-        }
+        boolean updatePkg = updatePkgValue();
+        boolean updateType = updateTypeValue();
 
-        List<String> keyList = getKeyList(mValueType, mValuePkg);
-        mKey.setAdapter(new ArrayAdapter<>(this,
-                R.layout.auto_complete_item, keyList));
+        if (updatePkg || updateType) {
+            if (mValuePkg == null || mValuePkg.isEmpty() || mValueType == null
+                    || mValueType.isEmpty()) {
+                return;
+            }
+
+            List<String> keyList = getKeyList(mValueType, mValuePkg);
+            mKey.setAdapter(new ArrayAdapter<>(this,
+                    R.layout.auto_complete_item, keyList));
+        }
     }
 
     private List<String> getKeyList(String type, String pkg) {
@@ -231,5 +249,13 @@ public class MainActivity extends Activity {
         }
 
         return keyList;
+    }
+
+    private String[] getTypes() {
+        if (mTypes == null) {
+            mTypes = getResources().getStringArray(R.array.types);
+        }
+
+        return mTypes;
     }
 }
