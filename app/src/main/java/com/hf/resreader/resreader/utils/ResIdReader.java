@@ -19,6 +19,10 @@ public class ResIdReader {
             INTERNAL_PKG
     };
 
+    private ResIdReader() {
+        // hide constructor
+    }
+
     protected static boolean isNativePkg(String pkg) {
         if (pkg == null || pkg.isEmpty()) {
             return true;

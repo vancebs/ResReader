@@ -18,16 +18,17 @@ public class InvalidTypeResReader implements IResReader {
 
     @Override
     public View read(Context context, View convertView, String pkg, String type, String key) {
-        if (convertView == null) {
-            convertView = View.inflate(context, getViewResId(), null);
+        View view = convertView;
+        if (view == null) {
+            view = View.inflate(context, getViewResId(), null);
         }
 
-        TextView valueView = (TextView) convertView.findViewById(R.id.value);
-        TextView resIdView = (TextView) convertView.findViewById(R.id.res_id);
+        TextView valueView = (TextView) view.findViewById(R.id.value);
+        TextView resIdView = (TextView) view.findViewById(R.id.res_id);
 
         resIdView.setText(String.valueOf(-1));
         valueView.setText(R.string.err_type);
 
-        return convertView;
+        return view;
     }
 }

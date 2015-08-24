@@ -20,12 +20,13 @@ public abstract class AbstractStringTypeResReader implements IResReader {
 
     @Override
     public View read(Context context, View convertView, String pkg, String type, String key) {
-        if (convertView == null) {
-            convertView = View.inflate(context, getViewResId(), null);
+        View view = convertView;
+        if (view == null) {
+            view = View.inflate(context, getViewResId(), null);
         }
 
-        TextView valueView = (TextView) convertView.findViewById(R.id.value);
-        TextView resIdView = (TextView) convertView.findViewById(R.id.res_id);
+        TextView valueView = (TextView) view.findViewById(R.id.value);
+        TextView resIdView = (TextView) view.findViewById(R.id.res_id);
 
         // get package context
         Context resContext = ResIdReader.getPkgContext(context, pkg);
@@ -37,7 +38,7 @@ public abstract class AbstractStringTypeResReader implements IResReader {
         resIdView.setText(String.valueOf(resId));
         valueView.setText(getValue(resContext, resId));
 
-        return convertView;
+        return view;
     }
 
     public abstract String getValue(Context resContext, int resId);

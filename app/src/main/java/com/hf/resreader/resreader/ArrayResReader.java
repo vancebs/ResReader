@@ -2,12 +2,15 @@ package com.hf.resreader.resreader;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 
 /**
  * Created by Fan on 2015/8/21.
  * Array resource reader
  */
 public class ArrayResReader extends AbstractStringTypeResReader {
+    public static final String TAG = "ArrayResReader";
+
     @Override
     public String getValue(Context resContext, int resId) {
         String value;
@@ -30,6 +33,7 @@ public class ArrayResReader extends AbstractStringTypeResReader {
             }
 
         } catch (Resources.NotFoundException e) {
+            Log.d(TAG, "Cannot find resource.", e);
             value = "Failed to get the resource";
         }
 

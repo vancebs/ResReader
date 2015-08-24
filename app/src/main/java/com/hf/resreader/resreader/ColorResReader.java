@@ -2,6 +2,7 @@ package com.hf.resreader.resreader;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -14,17 +15,20 @@ import com.hf.resreader.resreader.utils.ResIdReader;
  * Color resource reader
  */
 public class ColorResReader implements IResReader {
+    public static final String TAG = "ColorResReader";
+
     private static final String COLOR_STRING_FORMAT = "0x%X (%d)";
 
     @Override
     public View read(Context context, View convertView, String pkg, String type, String key) {
-        if (convertView == null) {
-            convertView = View.inflate(context, getViewResId(), null);
+        View view = convertView;
+        if (view == null) {
+            view = View.inflate(context, getViewResId(), null);
         }
 
-        TextView resIdView = (TextView) convertView.findViewById(R.id.res_id);
-        FrameLayout blockView = (FrameLayout) convertView.findViewById(R.id.color_block);
-        TextView valueView = (TextView) convertView.findViewById(R.id.color_value);
+        TextView resIdView = (TextView) view.findViewById(R.id.res_id);
+        FrameLayout blockView = (FrameLayout) view.findViewById(R.id.color_block);
+        TextView valueView = (TextView) view.findViewById(R.id.color_value);
 
         // get package context
         Context resContext = ResIdReader.getPkgContext(context, pkg);
@@ -39,6 +43,7 @@ public class ColorResReader implements IResReader {
             color = resContext.getResources().getColor(resId);
             msg = String.format(COLOR_STRING_FORMAT, color, color);
         } catch (Resources.NotFoundException e) {
+            Log.d(TAG, "Resource not found. So set color as 0x000000", e);
             color = 0x000000;
             msg = "Resource not found";
         }
@@ -48,7 +53,7 @@ public class ColorResReader implements IResReader {
         blockView.setBackgroundColor(color);
         valueView.setText(msg);
 
-        return convertView;
+        return view;
     }
 
     @Override
