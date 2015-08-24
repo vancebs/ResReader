@@ -48,7 +48,7 @@ public class ResReaderManager {
     public static final String TYPE_XML = "xml";
     public static final String TYPE_STYLEABLE = "styleable";
 
-    private static Map<String, Class<?>> mReaderMap = null;
+    private static Map<String, IResReader> mReaderMap = null;
 
     private ViewGroup mContainer;
     private Context mContext;
@@ -62,49 +62,47 @@ public class ResReaderManager {
         mContainer = container;
     }
 
-    private static Map<String, Class<?>> getReaderMap() {
+    private static Map<String, IResReader> getReaderMap() {
         if (mReaderMap == null) {
             mReaderMap = new HashMap<>();
 
-            mReaderMap.put(TYPE_ANIM, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_ANIMATOR, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_ARRAY, ArrayResReader.class);
-            mReaderMap.put(TYPE_ATTR, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_BOOLEAN, BooleanResReader.class);
-            mReaderMap.put(TYPE_COLOR, ColorResReader.class);
-            mReaderMap.put(TYPE_DIMEN, DimenResReader.class);
-            mReaderMap.put(TYPE_DRAWABLE, DrawableResReader.class);
-            mReaderMap.put(TYPE_FRACTION, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_ID, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_INTEGER, IntegerResReader.class);
-            mReaderMap.put(TYPE_INTERPOLATOR, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_LAYOUT, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_MENU, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_MIPMAP, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_PLURALS, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_RAW, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_STRING, StringResReader.class);
-            mReaderMap.put(TYPE_STYLE, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_TRANSITION, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_XML, InvalidTypeResReader.class); // TODO
-            mReaderMap.put(TYPE_STYLEABLE, InvalidTypeResReader.class); // TODO
+            IResReader invalidTypeResReader = new InvalidTypeResReader();
+
+            mReaderMap.put(TYPE_ANIM, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_ANIMATOR, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_ARRAY, new ArrayResReader());
+            mReaderMap.put(TYPE_ATTR, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_BOOLEAN, new BooleanResReader());
+            mReaderMap.put(TYPE_COLOR, new ColorResReader());
+            mReaderMap.put(TYPE_DIMEN, new DimenResReader());
+            mReaderMap.put(TYPE_DRAWABLE, new DrawableResReader());
+            mReaderMap.put(TYPE_FRACTION, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_ID, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_INTEGER, new IntegerResReader());
+            mReaderMap.put(TYPE_INTERPOLATOR, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_LAYOUT, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_MENU, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_MIPMAP, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_PLURALS, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_RAW, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_STRING, new StringResReader());
+            mReaderMap.put(TYPE_STYLE, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_TRANSITION, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_XML, invalidTypeResReader); // TODO
+            mReaderMap.put(TYPE_STYLEABLE, invalidTypeResReader); // TODO
         }
 
         return mReaderMap;
     }
 
     private static IResReader getReader(String type) {
-        Class<?> clazz = getReaderMap().get(type);
-        if (clazz == null) {
-            return new InvalidTypeResReader();
-        } else {
-            try {
-                return (IResReader) clazz.newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
-                Log.d(TAG, "new ResReader instance failed.", e);
-                return new InvalidTypeResReader();
-            }
+        IResReader reader = getReaderMap().get(type);
+        if (reader == null) {
+            Log.w(TAG, "Invalid type: " + type);
+            reader = new InvalidTypeResReader();
         }
+
+        return reader;
     }
 
     public void read( String pkg, String type, String key) {
