@@ -127,13 +127,11 @@ public class MainActivity extends Activity {
     }
 
     private void onReadClicked() {
-        boolean updatePkg = updatePkgValue();
-        boolean updateType = updateTypeValue();
-        boolean updateKey = updateKeyValue();
+        updatePkgValue();
+        updateTypeValue();
+        updateKeyValue();
 
-        if (updatePkg || updateType || updateKey) {
-            mResReaderManager.read(mValuePkg, mValueType, mValueKey);
-        }
+        mResReaderManager.read(mValuePkg, mValueType, mValueKey);
     }
 
     private void onClearClicked() {

@@ -13,9 +13,9 @@
         <!-- <item >id</item> -->
         <item >integer</item>
         <!-- <item >interpolator</item> -->
-        <!-- <item >layout</item> -->
+        <item >layout</item>
         <!-- <item >menu</item> -->
-        <!-- <item >mipmap</item> -->
+        <item >mipmap</item>
         <!-- <item >plurals</item> -->
         <!-- <item >raw</item> -->
         <item >string</item>

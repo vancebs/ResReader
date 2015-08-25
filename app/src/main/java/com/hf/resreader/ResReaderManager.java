@@ -13,6 +13,7 @@ import com.hf.resreader.resreader.DrawableResReader;
 import com.hf.resreader.resreader.IResReader;
 import com.hf.resreader.resreader.IntegerResReader;
 import com.hf.resreader.resreader.InvalidTypeResReader;
+import com.hf.resreader.resreader.LayoutResReader;
 import com.hf.resreader.resreader.StringResReader;
 
 import java.util.HashMap;
@@ -63,9 +64,9 @@ public class ResReaderManager {
             put(TYPE_ID, INVALID_TYPE_RES_READER); // TODO
             put(TYPE_INTEGER, new IntegerResReader());
             put(TYPE_INTERPOLATOR, INVALID_TYPE_RES_READER); // TODO
-            put(TYPE_LAYOUT, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_LAYOUT, new LayoutResReader());
             put(TYPE_MENU, INVALID_TYPE_RES_READER); // TODO
-            put(TYPE_MIPMAP, INVALID_TYPE_RES_READER); // TODO
+            put(TYPE_MIPMAP, new DrawableResReader());
             put(TYPE_PLURALS, INVALID_TYPE_RES_READER); // TODO
             put(TYPE_RAW, INVALID_TYPE_RES_READER); // TODO
             put(TYPE_STRING, new StringResReader());
