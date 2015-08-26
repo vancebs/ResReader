@@ -1,0 +1,20 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:shape="rectangle" >
+    <!-- color -->
+    <solid android:color="@android:color/transparent"/>
+    <!-- line size -->
+    <stroke
+        android:width="1px"
+        android:color="@color/edge_color" />
+
+    <padding
+        android:left="1px"
+        android:top="1px"
+        android:right="1px"
+        android:bottom="1px" />
+
+    <size
+        android:width="@dimen/color_block_size"
+        android:height="@dimen/color_block_size" />"
+    
+ </shape>

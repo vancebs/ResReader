@@ -29,10 +29,11 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/result_text_size"
             android:text="@string/label_value" />
-        <FrameLayout
+        <ImageView
             android:id="@+id/color_block"
-            android:layout_width="@dimen/color_block_size"
-            android:layout_height="@dimen/color_block_size" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/edge" />
         <TextView
             android:id="@+id/color_value"
             android:layout_width="wrap_content"

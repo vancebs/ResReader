@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hf.resreader.R;
@@ -27,7 +28,7 @@ public class ColorResReader implements IResReader {
         }
 
         TextView resIdView = (TextView) view.findViewById(R.id.res_id);
-        FrameLayout blockView = (FrameLayout) view.findViewById(R.id.color_block);
+        ImageView blockView = (ImageView) view.findViewById(R.id.color_block);
         TextView valueView = (TextView) view.findViewById(R.id.color_value);
 
         // get package context

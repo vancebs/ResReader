@@ -11,6 +11,8 @@
     <string name="hint_package">Package name</string>
     <string name="hint_key">i.e. app_name</string>
 
+    <string name="btn_theme_bright">Bright</string>
+    <string name="btn_theme_dark">Dark</string>
     <string name="btn_read">Read</string>
     <string name="btn_clear">Clear</string>
 

@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,6 +30,7 @@ public class MainActivity extends Activity {
     private static final String EXTRA_PKG = "extra-pkg";
     private static final String EXTRA_TYPE_INDEX = "extra-type-index";
     private static final String EXTRA_KEY = "extra-key";
+    private static final String EXTRA_IS_DARK = "extra-is-dark";
 
     private String[] mTypes = null;
 
@@ -49,6 +51,11 @@ public class MainActivity extends Activity {
 
     private ResReaderManager mResReaderManager;
 
+    private ViewGroup mContainer;
+
+    private MenuItem mThemeBtn;
+    private boolean mIsDark = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +66,8 @@ public class MainActivity extends Activity {
         mKey = (AutoCompleteTextView) findViewById(R.id.key);
 
         // create reader manager
-        ViewGroup container = (ViewGroup) findViewById(R.id.value_container);
-        mResReaderManager = new ResReaderManager(this, container);
+        mContainer = (ViewGroup) findViewById(R.id.value_container);
+        mResReaderManager = new ResReaderManager(this, mContainer);
 
         // get pkg auto complete
         setPkgAutoComplete();
@@ -93,6 +100,7 @@ public class MainActivity extends Activity {
             mPkg.setText(savedInstanceState.getString(EXTRA_PKG, ""));
             mType.setSelection(savedInstanceState.getInt(EXTRA_TYPE_INDEX, 0));
             mKey.setText(savedInstanceState.getString(EXTRA_KEY, ""));
+            mIsDark = savedInstanceState.getBoolean(EXTRA_IS_DARK, false);
 
             onReadClicked();
         }
@@ -101,17 +109,23 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        mThemeBtn = menu.findItem(R.id.theme);
+        updateThemeButton();
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.read) {
-            onReadClicked();
-            return true;
-        } else if (item.getItemId() == R.id.clear) {
-            onClearClicked();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.read:
+                onReadClicked();
+                return true;
+            case R.id.clear:
+                onClearClicked();
+                return true;
+            case R.id.theme:
+                onThemeClicked();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -124,6 +138,7 @@ public class MainActivity extends Activity {
         outState.putString(EXTRA_PKG, mValuePkg);
         outState.putInt(EXTRA_TYPE_INDEX, mValueTypeIndex);
         outState.putString(EXTRA_KEY, mValueKey);
+        outState.putBoolean(EXTRA_IS_DARK, mIsDark);
     }
 
     private void onReadClicked() {
@@ -136,6 +151,20 @@ public class MainActivity extends Activity {
 
     private void onClearClicked() {
         mResReaderManager.clear();
+    }
+
+    private void onThemeClicked() {
+        mIsDark = !mIsDark;
+        updateThemeButton();
+    }
+
+    private void updateThemeButton() {
+        Resources res = getResources();
+        String title = mIsDark ? res.getString(R.string.btn_theme_bright) : res.getString(R.string.btn_theme_dark);
+        mThemeBtn.setTitle(title);
+        mThemeBtn.setTitleCondensed(title);
+
+        mContainer.setBackgroundResource(mIsDark ? R.color.background_color_dark : R.color.background_color_light);
     }
 
     private boolean isNativePkg(String pkg) {
