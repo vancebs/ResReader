@@ -42,7 +42,7 @@ public class LayoutResReader implements IResReader {
             layoutView.addView(layout);
         } catch (Resources.NotFoundException e) {
             Log.d(TAG, "Resource not found.", e);
-            msgView.setText("Cannot find resource.");
+            msgView.setText(R.string.err_not_found);
             msgView.setVisibility(View.VISIBLE);
         }
 

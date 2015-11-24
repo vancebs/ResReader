@@ -15,18 +15,11 @@ public class DimenResReader extends AbstractStringTypeResReader {
 
     @Override
     public String getValue(Context resContext, int resId) {
+        // ResourceNotFoundException Already handled by super class
         Resources res = resContext.getResources();
-        String value;
-        try {
-            float dp = res.getDimension(resId);
-            int px = res.getDimensionPixelOffset(resId);
-            int size = res.getDimensionPixelSize(resId);
-            value = String.format(VALUE_FORMAT, dp, px, size);
-        } catch (Resources.NotFoundException e) {
-            Log.d(TAG, "Resource not found.", e);
-            value = "Resource not found";
-        }
-
-        return value;
+        float dp = res.getDimension(resId);
+        int px = res.getDimensionPixelOffset(resId);
+        int size = res.getDimensionPixelSize(resId);
+        return String.format(VALUE_FORMAT, dp, px, size);
     }
 }

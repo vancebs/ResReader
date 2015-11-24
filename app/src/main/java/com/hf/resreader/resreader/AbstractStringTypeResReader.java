@@ -1,6 +1,7 @@
 package com.hf.resreader.resreader;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.TextView;
 
@@ -36,7 +37,11 @@ public abstract class AbstractStringTypeResReader implements IResReader {
 
         // set values
         resIdView.setText(String.valueOf(resId));
-        valueView.setText(getValue(resContext, resId));
+        try {
+            valueView.setText(getValue(resContext, resId));
+        } catch (Resources.NotFoundException e) {
+            valueView.setText(R.string.err_not_found);
+        }
 
         return view;
     }

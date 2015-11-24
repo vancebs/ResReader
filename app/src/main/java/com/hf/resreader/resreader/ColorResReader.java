@@ -46,7 +46,7 @@ public class ColorResReader implements IResReader {
         } catch (Resources.NotFoundException e) {
             Log.d(TAG, "Resource not found. So set color as 0x000000", e);
             color = 0x000000;
-            msg = "Resource not found";
+            msg = context.getResources().getString(R.string.err_not_found);
         }
 
         // set values
